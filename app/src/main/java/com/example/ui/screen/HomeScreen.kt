@@ -1,5 +1,8 @@
 package com.example.ui.screen
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -30,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.ServiceListing
 import com.example.ui.viewmodel.DirectoryViewModel
+import com.example.ui.viewmodel.SortOption
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,9 +47,11 @@ fun HomeScreen(
     val searchQuery by viewModel.searchQuery.collectAsState()
     val selectedCategory by viewModel.selectedCategory.collectAsState()
     val selectedLocation by viewModel.selectedLocation.collectAsState()
+    val sortBy by viewModel.sortBy.collectAsState()
 
     var activeTab by remember { mutableIntStateOf(0) } // 0 = Directory, 1 = Bookmarks
     var showLocationDialog by remember { mutableStateOf(false) }
+    var sortExpanded by remember { mutableStateOf(false) }
 
     val categories = listOf(
         "All" to Icons.Default.Home,
@@ -116,7 +122,7 @@ fun HomeScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column {
+                        Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 text = "RDL Service Directory",
                                 color = Color.White,
@@ -130,14 +136,29 @@ fun HomeScreen(
                                 fontWeight = FontWeight.Medium
                             )
                         }
-                        // Location Filter trigger
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(20.dp))
-                                .background(Color.White.copy(alpha = 0.2f))
-                                .clickable { showLocationDialog = true }
-                                .padding(horizontal = 12.dp, vertical = 6.dp)
-                        ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            val userDarkState by viewModel.isDarkTheme.collectAsState()
+                            val currentDark = userDarkState ?: androidx.compose.foundation.isSystemInDarkTheme()
+                            IconButton(
+                                onClick = { viewModel.toggleDarkTheme() },
+                                modifier = Modifier.size(40.dp)
+                            ) {
+                                Icon(
+                                    imageVector = if (currentDark) Icons.Default.WbSunny else Icons.Default.NightsStay,
+                                    contentDescription = "Toggle Theme Mode",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(22.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(6.dp))
+                            // Location Filter trigger
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(20.dp))
+                                    .background(Color.White.copy(alpha = 0.2f))
+                                    .clickable { showLocationDialog = true }
+                                    .padding(horizontal = 12.dp, vertical = 6.dp)
+                            ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
                                     imageVector = Icons.Default.Place,
@@ -162,6 +183,7 @@ fun HomeScreen(
                             }
                         }
                     }
+                }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -192,6 +214,83 @@ fun HomeScreen(
                         ),
                         singleLine = true
                     )
+                }
+            }
+
+            // Quick Help Services Section
+            val quickServices = listOf(
+                Triple("Plumbing", Icons.Default.Build, Brush.horizontalGradient(listOf(Color(0xFFE3F2FD), Color(0xFFBBDEFB)))),
+                Triple("Electrical", Icons.Default.Bolt, Brush.horizontalGradient(listOf(Color(0xFFFFFDE7), Color(0xFFFFF9C4)))),
+                Triple("AC Repair", Icons.Default.AcUnit, Brush.horizontalGradient(listOf(Color(0xFFE0F7FA), Color(0xFFB2EBF2)))),
+                Triple("Medical", Icons.Default.LocalHospital, Brush.horizontalGradient(listOf(Color(0xFFFFEBEE), Color(0xFFFFCDD2)))),
+                Triple("Transport", Icons.Default.DirectionsCar, Brush.horizontalGradient(listOf(Color(0xFFE8F5E9), Color(0xFFC8E6C9)))),
+                Triple("Cleaning", Icons.Default.Brush, Brush.horizontalGradient(listOf(Color(0xFFF3E5F5), Color(0xFFE1BEE7))))
+            )
+
+            Text(
+                text = "Quick Help Services",
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 4.dp)
+            )
+
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 4.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(quickServices) { (cat, icon, lightBrush) ->
+                    val userDarkState by viewModel.isDarkTheme.collectAsState()
+                    val isDark = userDarkState ?: androidx.compose.foundation.isSystemInDarkTheme()
+                    val cardBrush = if (isDark) {
+                        Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.colorScheme.surface))
+                    } else {
+                        lightBrush
+                    }
+                    val textColor = if (isDark) MaterialTheme.colorScheme.onSurface else Color.Black
+                    val iconColor = MaterialTheme.colorScheme.primary
+
+                    Card(
+                        modifier = Modifier
+                            .width(115.dp)
+                            .height(72.dp)
+                            .clickable {
+                                viewModel.setSelectedCategory(cat)
+                            }
+                            .testTag("quick_service_$cat"),
+                        shape = RoundedCornerShape(12.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(cardBrush)
+                                .padding(8.dp)
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                verticalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Icon(
+                                    imageVector = icon,
+                                    contentDescription = cat,
+                                    tint = iconColor,
+                                    modifier = Modifier.size(22.dp)
+                                )
+                                Text(
+                                    text = cat,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = textColor,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+                        }
+                    }
                 }
             }
 
@@ -269,6 +368,92 @@ fun HomeScreen(
 
             // Main List area
             val displayList = if (activeTab == 0) services else bookmarkedServices
+
+            // Sort & Info Bar
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "${displayList.size} ${if (displayList.size == 1) "service" else "services"} found",
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                )
+
+                // Sort Dropdown
+                Box {
+                    Row(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                            .clickable { sortExpanded = true }
+                            .padding(horizontal = 10.dp, vertical = 6.dp)
+                            .testTag("sort_dropdown_trigger"),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Sort,
+                            contentDescription = "Sort By",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "Sort: ${sortBy.displayName}",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Icon(
+                            imageVector = Icons.Default.ArrowDropDown,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+
+                    DropdownMenu(
+                        expanded = sortExpanded,
+                        onDismissRequest = { sortExpanded = false },
+                        modifier = Modifier.background(MaterialTheme.colorScheme.surface)
+                    ) {
+                        SortOption.values().forEach { option ->
+                            DropdownMenuItem(
+                                text = { 
+                                    Text(
+                                        text = option.displayName,
+                                        fontWeight = if (sortBy == option) FontWeight.Bold else FontWeight.Normal,
+                                        color = if (sortBy == option) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                                    ) 
+                                },
+                                onClick = {
+                                    viewModel.setSortBy(option)
+                                    sortExpanded = false
+                                },
+                                leadingIcon = {
+                                    val icon = when (option) {
+                                        SortOption.NAME_ASC -> Icons.Default.ArrowUpward
+                                        SortOption.NAME_DESC -> Icons.Default.ArrowDownward
+                                        SortOption.WHATSAPP_FIRST -> Icons.Default.Chat
+                                        SortOption.PHONE_FIRST -> Icons.Default.Call
+                                    }
+                                    Icon(
+                                        imageVector = icon,
+                                        contentDescription = null,
+                                        tint = if (sortBy == option) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                },
+                                modifier = Modifier.testTag("sort_item_${option.name}")
+                            )
+                        }
+                    }
+                }
+            }
 
             if (displayList.isEmpty()) {
                 Box(
@@ -378,6 +563,7 @@ fun ServiceListingCard(
     onToggleBookmark: () -> Unit,
     onDelete: () -> Unit
 ) {
+    val context = LocalContext.current
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -400,23 +586,119 @@ fun ServiceListingCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Category Badge
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
-                        .padding(horizontal = 10.dp, vertical = 4.dp)
+                // Category Badge & Integration Badges
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(
-                        text = service.category,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    // Category Badge
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f))
+                            .padding(horizontal = 10.dp, vertical = 4.dp)
+                    ) {
+                        Text(
+                            text = service.category,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    // Integration Badges
+                    if (service.phoneNumber.isNotBlank()) {
+                        Surface(
+                            shape = RoundedCornerShape(8.dp),
+                            color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f),
+                            modifier = Modifier.size(24.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = Icons.Default.Call,
+                                    contentDescription = "Phone Available",
+                                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    modifier = Modifier.size(12.dp)
+                                )
+                            }
+                        }
+                    }
+                    if (service.whatsappNumber.isNotBlank()) {
+                        Surface(
+                            shape = RoundedCornerShape(8.dp),
+                            color = Color(0xFF25D366).copy(alpha = 0.15f),
+                            modifier = Modifier.size(24.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = Icons.Default.Chat,
+                                    contentDescription = "WhatsApp Available",
+                                    tint = Color(0xFF128C7E),
+                                    modifier = Modifier.size(12.dp)
+                                )
+                            }
+                        }
+                    }
                 }
 
                 // Header Action icons
-                Row {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (service.phoneNumber.isNotBlank()) {
+                        IconButton(
+                            onClick = {
+                                val dialIntent = Intent(Intent.ACTION_DIAL).apply {
+                                    data = Uri.parse("tel:${service.phoneNumber}")
+                                }
+                                context.startActivity(dialIntent)
+                            },
+                            modifier = Modifier
+                                .size(36.dp)
+                                .testTag("call_button_${service.id}")
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Call,
+                                contentDescription = "Call Provider",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    }
+
+                    IconButton(
+                        onClick = {
+                            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                type = "text/plain"
+                                val shareText = buildString {
+                                    appendLine("Check out this service on RDL Directory:")
+                                    appendLine("Title: ${service.title}")
+                                    appendLine("Category: ${service.category}")
+                                    appendLine("Description: ${service.description}")
+                                    if (service.phoneNumber.isNotBlank()) {
+                                        appendLine("Phone: ${service.phoneNumber}")
+                                    }
+                                    if (service.whatsappNumber.isNotBlank()) {
+                                        appendLine("WhatsApp: ${service.whatsappNumber}")
+                                    }
+                                    if (service.location.isNotBlank()) {
+                                        appendLine("Location: ${service.location}")
+                                    }
+                                }
+                                putExtra(Intent.EXTRA_TEXT, shareText)
+                            }
+                            context.startActivity(Intent.createChooser(shareIntent, "Share service via"))
+                        },
+                        modifier = Modifier
+                            .size(36.dp)
+                            .testTag("share_button_${service.id}")
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Share,
+                            contentDescription = "Share Service",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+
                     IconButton(
                         onClick = onToggleBookmark,
                         modifier = Modifier.size(36.dp)

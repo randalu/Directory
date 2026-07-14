@@ -156,6 +156,52 @@ class ServiceRepository(private val serviceDao: ServiceDao) {
                 )
             )
             serviceDao.insertAll(sampleListings)
+
+            // Prepopulate some initial reviews
+            val sampleReviews = listOf(
+                com.example.data.model.Review(serviceId = 1, reviewerName = "Amara Senanayake", rating = 5.0, comment = "Excellent plumbing service! Resolved a long-standing leak in our kitchen very quickly.", dateAdded = "Jul 09, 2026"),
+                com.example.data.model.Review(serviceId = 2, reviewerName = "Rohan Perera", rating = 5.0, comment = "Very reliable electrician. Fixed our fuse box and fans cleanly.", dateAdded = "Jul 10, 2026"),
+                com.example.data.model.Review(serviceId = 2, reviewerName = "Sanduni Jayasekara", rating = 4.0, comment = "Friendly and professional. High quality wiring job.", dateAdded = "Jul 11, 2026"),
+                com.example.data.model.Review(serviceId = 4, reviewerName = "Nisansala Silva", rating = 5.0, comment = "They did an amazing job cleaning our split unit AC. Highly recommend Kumara!", dateAdded = "Jul 11, 2026"),
+                com.example.data.model.Review(serviceId = 5, reviewerName = "Dilhani Cooray", rating = 5.0, comment = "Best bridal beauty care in the Ja-Ela area. Nisha is a master of makeup!", dateAdded = "Jul 12, 2026")
+            )
+            for (r in sampleReviews) {
+                serviceDao.insertReview(r)
+            }
+        }
+    }
+
+    fun getReviewsForService(serviceId: Int): Flow<List<com.example.data.model.Review>> =
+        serviceDao.getReviewsForService(serviceId)
+
+    suspend fun addReview(review: com.example.data.model.Review) {
+        serviceDao.insertReview(review)
+        
+        // Recalculate average rating and review count
+        val reviews = serviceDao.getReviewsListForService(review.serviceId)
+        val count = reviews.size
+        val avgRating = if (count > 0) {
+            reviews.map { it.rating }.average()
+        } else {
+            0.0
+        }
+        
+        val service = serviceDao.getServiceByIdSync(review.serviceId)
+        if (service != null) {
+            val roundedRating = Math.round(avgRating * 10.0) / 10.0
+            serviceDao.updateService(
+                service.copy(
+                    rating = roundedRating,
+                    reviewCount = count
+                )
+            )
+        }
+    }
+
+    suspend fun incrementViews(serviceId: Int) {
+        val service = serviceDao.getServiceByIdSync(serviceId)
+        if (service != null) {
+            serviceDao.updateService(service.copy(views = service.views + 1))
         }
     }
 }

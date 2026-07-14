@@ -9,13 +9,27 @@ import androidx.room.Update
 import com.example.data.model.ServiceListing
 import kotlinx.coroutines.flow.Flow
 
+import com.example.data.model.Review
+
 @Dao
 interface ServiceDao {
+    @Query("SELECT * FROM reviews WHERE serviceId = :serviceId ORDER BY id DESC")
+    fun getReviewsForService(serviceId: Int): Flow<List<Review>>
+
+    @Query("SELECT * FROM reviews WHERE serviceId = :serviceId")
+    suspend fun getReviewsListForService(serviceId: Int): List<Review>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertReview(review: Review): Long
+
     @Query("SELECT * FROM service_listings ORDER BY id DESC")
     fun getAllServices(): Flow<List<ServiceListing>>
 
     @Query("SELECT * FROM service_listings WHERE id = :id LIMIT 1")
     fun getServiceById(id: Int): Flow<ServiceListing?>
+
+    @Query("SELECT * FROM service_listings WHERE id = :id LIMIT 1")
+    suspend fun getServiceByIdSync(id: Int): ServiceListing?
 
     @Query("SELECT * FROM service_listings WHERE isBookmarked = 1 ORDER BY id DESC")
     fun getBookmarkedServices(): Flow<List<ServiceListing>>

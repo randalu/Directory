@@ -6,7 +6,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.data.model.ServiceListing
 
-@Database(entities = [ServiceListing::class], version = 1, exportSchema = false)
+import com.example.data.model.Review
+
+@Database(entities = [ServiceListing::class, Review::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun serviceDao(): ServiceDao
 

@@ -16,6 +16,13 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+enum class SortOption(val displayName: String) {
+    NAME_ASC("Name (A-Z)"),
+    NAME_DESC("Name (Z-A)"),
+    WHATSAPP_FIRST("WhatsApp First"),
+    PHONE_FIRST("Phone First")
+}
+
 class DirectoryViewModel(
     application: Application,
     private val repository: ServiceRepository
@@ -30,6 +37,20 @@ class DirectoryViewModel(
     private val _selectedLocation = MutableStateFlow<String?>("All")
     val selectedLocation = _selectedLocation.asStateFlow()
 
+    private val _sortBy = MutableStateFlow(SortOption.NAME_ASC)
+    val sortBy = _sortBy.asStateFlow()
+
+    private val _isDarkTheme = MutableStateFlow<Boolean?>(null)
+    val isDarkTheme = _isDarkTheme.asStateFlow()
+
+    fun toggleDarkTheme() {
+        _isDarkTheme.value = !(_isDarkTheme.value ?: false)
+    }
+
+    fun setSortBy(option: SortOption) {
+        _sortBy.value = option
+    }
+
     init {
         // Run pre-population on startup in background
         viewModelScope.launch {
@@ -41,9 +62,17 @@ class DirectoryViewModel(
         repository.allServices,
         _searchQuery,
         _selectedCategory,
-        _selectedLocation
-    ) { services, query, category, location ->
-        services.filter { service ->
+        _selectedLocation,
+        _sortBy
+    ) { array ->
+        @Suppress("UNCHECKED_CAST")
+        val services = array[0] as List<ServiceListing>
+        val query = array[1] as String
+        val category = array[2] as String?
+        val location = array[3] as String?
+        val sortBy = array[4] as SortOption
+
+        val filtered = services.filter { service ->
             val matchesQuery = query.isBlank() ||
                     service.title.contains(query, ignoreCase = true) ||
                     service.description.contains(query, ignoreCase = true) ||
@@ -57,6 +86,23 @@ class DirectoryViewModel(
                     service.location.equals(location, ignoreCase = true)
 
             matchesQuery && matchesCategory && matchesLocation
+        }
+
+        when (sortBy) {
+            SortOption.NAME_ASC -> filtered.sortedBy { it.title.lowercase() }
+            SortOption.NAME_DESC -> filtered.sortedByDescending { it.title.lowercase() }
+            SortOption.WHATSAPP_FIRST -> {
+                filtered.sortedWith(
+                    compareByDescending<ServiceListing> { it.whatsappNumber.isNotBlank() }
+                        .thenBy { it.title.lowercase() }
+                )
+            }
+            SortOption.PHONE_FIRST -> {
+                filtered.sortedWith(
+                    compareByDescending<ServiceListing> { it.phoneNumber.isNotBlank() }
+                        .thenBy { it.title.lowercase() }
+                )
+            }
         }
     }.stateIn(
         scope = viewModelScope,
@@ -132,6 +178,29 @@ class DirectoryViewModel(
             }
         }
         return selected.asStateFlow()
+    }
+
+    fun getReviewsForService(serviceId: Int) = repository.getReviewsForService(serviceId)
+
+    fun addReview(serviceId: Int, reviewerName: String, rating: Double, comment: String) {
+        viewModelScope.launch {
+            val formatter = java.text.SimpleDateFormat("MMM dd, yyyy", java.util.Locale.getDefault())
+            val dateStr = formatter.format(java.util.Date())
+            val review = com.example.data.model.Review(
+                serviceId = serviceId,
+                reviewerName = reviewerName.ifBlank { "Anonymous" },
+                rating = rating,
+                comment = comment,
+                dateAdded = dateStr
+            )
+            repository.addReview(review)
+        }
+    }
+
+    fun incrementViews(serviceId: Int) {
+        viewModelScope.launch {
+            repository.incrementViews(serviceId)
+        }
     }
 
     // Factory pattern to simplify injection

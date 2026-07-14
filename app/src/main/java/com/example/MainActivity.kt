@@ -12,6 +12,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.example.ui.screen.AddServiceScreen
 import com.example.ui.screen.HomeScreen
 import com.example.ui.screen.ServiceDetailScreen
@@ -23,13 +25,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MyApplicationTheme {
+            // Retrieve or create ViewModel with Factory containing application context
+            val directoryViewModel: DirectoryViewModel = viewModel(
+                factory = DirectoryViewModel.Factory(application)
+            )
+
+            val userDarkThemeSelection by directoryViewModel.isDarkTheme.collectAsState(initial = null)
+            val darkTheme = userDarkThemeSelection ?: androidx.compose.foundation.isSystemInDarkTheme()
+
+            MyApplicationTheme(darkTheme = darkTheme) {
                 val navController = rememberNavController()
-                
-                // Retrieve or create ViewModel with Factory containing application context
-                val directoryViewModel: DirectoryViewModel = viewModel(
-                    factory = DirectoryViewModel.Factory(application)
-                )
 
                 NavHost(
                     navController = navController,
