@@ -1,0 +1,6 @@
+{
+  "name": "RDL Directory",
+  "description": "Find and promote local services in Raddoluwa, Seeduwa, and neighboring areas in Sri Lanka. Fast calling, WhatsApp integration, and offline persistence.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

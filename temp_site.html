@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Service Directory - Find Local Services in Raddoluwa/Seeduwa</title>
+  <meta name="description" content="Find trusted local services in Raddoluwa/Seeduwa — plumbing, electrical, cleaning, and more. Free directory for community service providers.">
+  <link rel="canonical" href="https://ZRO.ovh/dir" />
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Service Directory - Find Local Services in Raddoluwa/Seeduwa">
+  <meta property="og:description" content="Find trusted local services in Raddoluwa/Seeduwa — plumbing, electrical, cleaning, and more. Free directory for community service providers.">
+  <meta property="og:url" content="https://ZRO.ovh/dir">
+  <meta property="og:image" content="https://ZRO.ovh/dir/default-og.png">
+  <meta property="og:site_name" content="RDL Service Directory">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Service Directory - Find Local Services in Raddoluwa/Seeduwa">
+  <meta name="twitter:description" content="Find trusted local services in Raddoluwa/Seeduwa — plumbing, electrical, cleaning, and more. Free directory for community service providers.">
+  <meta name="twitter:image" content="https://ZRO.ovh/dir/default-og.png">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="keywords" content="Raddoluwa services, Seeduwa services, local service directory, Sri Lanka service providers, Raddoluwa Seeduwa"><script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"RDL Service Directory","url":"https://ZRO.ovh/dir","description":"Local Service Directory for Raddoluwa/Seeduwa area","areaServed":["Raddoluwa","Seeduwa","Kandana","Katunayake","Negombo","Ja-Ela"]}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","url":"https://ZRO.ovh/dir","name":"RDL Service Directory","potentialAction":{"@type":"SearchAction","target":"https://ZRO.ovh/dir/?search={search_term_string}","query-input":"required name=search_term_string"}}</script></head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-modern">
+  <div class="container">
+    <a class="navbar-brand" href="index.php">
+      RDL Service Directory      <small>Raddoluwa / Seeduwa</small>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a href="index.php" class="nav-link">Home</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Categories</a>
+          <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="category.php?id=7">AC Repair</a></li>
+                          <li><a class="dropdown-item" href="category.php?id=15">Beauty</a></li>
+                          <li><a class="dropdown-item" href="category.php?id=3">Carpentry</a></li>
+                          <li><a class="dropdown-item" href="category.php?id=11">Catering</a></li>
+                          <li><a class="dropdown-item" href="category.php?id=4">Cleaning</a></li>
+                          <li><a class="dropdown-item" href="category.php?id=2">Electrical</a></li>
+                          <li><a class="dropdown-item" href="category.php?id=6">Gardening</a></li>
+                          <li><a class="dropdown-item" href="category.php?id=14">IT Support</a></li>
+                          <li><a class="dropdown-item" href="category.php?id=13">Medical</a></li>
+                          <li><a class="dropdown-item" href="category.php?id=8">Moving</a></li>
+                          <li><a class="dropdown-item" href="category.php?id=5">Painting</a></li>
+                          <li><a class="dropdown-item" href="category.php?id=10">Photography</a></li>
+                          <li><a class="dropdown-item" href="category.php?id=1">Plumbing</a></li>
+                          <li><a class="dropdown-item" href="category.php?id=12">Transport</a></li>
+                          <li><a class="dropdown-item" href="category.php?id=9">Tutoring</a></li>
+                      </ul>
+        </li>
+      </ul>
+      <div class="d-flex gap-2 align-items-center">
+                  <a href="login.php" class="btn btn-outline-light btn-sm">Login</a>
+          <a href="register.php" class="btn btn-light btn-sm">Register</a>
+              </div>
+    </div>
+  </div>
+</nav>
+
+
+<!-- Hero -->
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-badge">✨ Raddoluwa &amp; Seeduwa Area</div>
+    <div class="hero-logo">RDL <span>Service Directory</span></div>
+    <p class="hero-sub">Discover trusted local service providers in your community</p>
+    <form method="GET" class="hero-search">
+      <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="Search services..." value="">
+        <select name="category" class="form-select d-none d-md-flex" style="max-width:160px;border-left:1px solid #e2e8f0">
+          <option value="">All</option>
+                      <option value="Electrical">Electrical</option>
+                      <option value="Gardening">Gardening</option>
+                      <option value="Plumbing">Plumbing</option>
+                  </select>
+        <button type="submit" class="btn">Search</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- Category Pills -->
+<div class="container category-pills">
+      <a href="category.php?id=2" class="category-pill">
+      Electrical      <span class="count">1</span>
+    </a>
+      <a href="category.php?id=6" class="category-pill">
+      Gardening      <span class="count">1</span>
+    </a>
+      <a href="category.php?id=1" class="category-pill">
+      Plumbing      <span class="count">1</span>
+    </a>
+  </div>
+
+
+<div class="container mt-4">
+
+  
+  <!-- Ads Grid -->
+      <div class="row g-4">
+              <div class="col-md-4 col-sm-6">        <div class="service-card">
+            <div class="card-img" style="background:linear-gradient(135deg, #275D2B, #1a4020)">
+                                                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:1">
+                    <div style="font-size:2rem;line-height:1;margin-bottom:4px">🌿</div>
+                    <div style="font-size:0.65rem;font-weight:800;color:rgba(255,255,255,0.5);letter-spacing:0.15em">RDL Service Directory</div>
+                </div>
+                <span class="category-badge">Gardening</span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><a href="service_view.php?id=3">Garden Landscaping</a></h5>
+                <p class="card-text">Complete garden design....</p>
+                <div class="card-meta">
+                    <span>📍 Raddoluwa</span>
+                    <span>📅 Jul 08, 2026</span>
+                </div>
+                <div class="card-footer-info">
+                    <a href="provider_profile.php?id=1" class="name text-decoration-none">John Doe</a>
+                    <div class="d-flex gap-2">
+                        <a href="tel:+94771234567" class="btn-call">📞 Call</a>
+                        <a href="https://wa.me/94771234567" target="_blank" class="btn-call" style="background:#25D366">💬 WhatsApp</a>
+                        <a href="service_view.php?id=3" class="btn-view">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>              <div class="col-md-4 col-sm-6">        <div class="service-card">
+            <div class="card-img" style="background:linear-gradient(135deg, #275D2B, #1a4020)">
+                                                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:1">
+                    <div style="font-size:2rem;line-height:1;margin-bottom:4px">⚡</div>
+                    <div style="font-size:0.65rem;font-weight:800;color:rgba(255,255,255,0.5);letter-spacing:0.15em">RDL Service Directory</div>
+                </div>
+                <span class="category-badge">Electrical</span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><a href="service_view.php?id=2">Home Electrical Wiring</a></h5>
+                <p class="card-text">Professional electrical installation....</p>
+                <div class="card-meta">
+                    <span>📍 Seeduwa</span>
+                    <span>📅 Jul 08, 2026</span>
+                </div>
+                <div class="card-footer-info">
+                    <a href="provider_profile.php?id=1" class="name text-decoration-none">John Doe</a>
+                    <div class="d-flex gap-2">
+                        <a href="tel:+94771234567" class="btn-call">📞 Call</a>
+                        <a href="https://wa.me/94771234567" target="_blank" class="btn-call" style="background:#25D366">💬 WhatsApp</a>
+                        <a href="service_view.php?id=2" class="btn-view">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>              <div class="col-md-4 col-sm-6">        <div class="service-card">
+            <div class="card-img" style="background:linear-gradient(135deg, #275D2B, #1a4020)">
+                                                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:1">
+                    <div style="font-size:2rem;line-height:1;margin-bottom:4px">🔧</div>
+                    <div style="font-size:0.65rem;font-weight:800;color:rgba(255,255,255,0.5);letter-spacing:0.15em">RDL Service Directory</div>
+                </div>
+                <span class="category-badge">Plumbing</span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><a href="service_view.php?id=1">Expert Plumbing Repairs</a></h5>
+                <p class="card-text">Fast and reliable plumbing....</p>
+                <div class="card-meta">
+                    <span>📍 Raddoluwa</span>
+                    <span>📅 Jul 08, 2026</span>
+                </div>
+                <div class="card-footer-info">
+                    <a href="provider_profile.php?id=1" class="name text-decoration-none">John Doe</a>
+                    <div class="d-flex gap-2">
+                        <a href="tel:+94771234567" class="btn-call">📞 Call</a>
+                        <a href="https://wa.me/94771234567" target="_blank" class="btn-call" style="background:#25D366">💬 WhatsApp</a>
+                        <a href="service_view.php?id=1" class="btn-view">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>          </div>
+
+      
+    <!-- Latest Ads -->
+  <div class="section-header mt-5">
+    <h3>Latest Services</h3>
+      </div>
+  <div class="row g-4 mb-5">
+          <div class="col-md-4 col-sm-6">        <div class="service-card">
+            <div class="card-img" style="background:linear-gradient(135deg, #275D2B, #1a4020)">
+                                                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:1">
+                    <div style="font-size:2rem;line-height:1;margin-bottom:4px">🌿</div>
+                    <div style="font-size:0.65rem;font-weight:800;color:rgba(255,255,255,0.5);letter-spacing:0.15em">RDL Service Directory</div>
+                </div>
+                <span class="category-badge">Gardening</span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><a href="service_view.php?id=3">Garden Landscaping</a></h5>
+                <p class="card-text">Complete garden design....</p>
+                <div class="card-meta">
+                    <span>📍 Raddoluwa</span>
+                    <span>📅 Jul 08, 2026</span>
+                </div>
+                <div class="card-footer-info">
+                    <a href="provider_profile.php?id=1" class="name text-decoration-none">John Doe</a>
+                    <div class="d-flex gap-2">
+                        <a href="tel:+94771234567" class="btn-call">📞 Call</a>
+                        <a href="https://wa.me/94771234567" target="_blank" class="btn-call" style="background:#25D366">💬 WhatsApp</a>
+                        <a href="service_view.php?id=3" class="btn-view">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>          <div class="col-md-4 col-sm-6">        <div class="service-card">
+            <div class="card-img" style="background:linear-gradient(135deg, #275D2B, #1a4020)">
+                                                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:1">
+                    <div style="font-size:2rem;line-height:1;margin-bottom:4px">⚡</div>
+                    <div style="font-size:0.65rem;font-weight:800;color:rgba(255,255,255,0.5);letter-spacing:0.15em">RDL Service Directory</div>
+                </div>
+                <span class="category-badge">Electrical</span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><a href="service_view.php?id=2">Home Electrical Wiring</a></h5>
+                <p class="card-text">Professional electrical installation....</p>
+                <div class="card-meta">
+                    <span>📍 Seeduwa</span>
+                    <span>📅 Jul 08, 2026</span>
+                </div>
+                <div class="card-footer-info">
+                    <a href="provider_profile.php?id=1" class="name text-decoration-none">John Doe</a>
+                    <div class="d-flex gap-2">
+                        <a href="tel:+94771234567" class="btn-call">📞 Call</a>
+                        <a href="https://wa.me/94771234567" target="_blank" class="btn-call" style="background:#25D366">💬 WhatsApp</a>
+                        <a href="service_view.php?id=2" class="btn-view">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>          <div class="col-md-4 col-sm-6">        <div class="service-card">
+            <div class="card-img" style="background:linear-gradient(135deg, #275D2B, #1a4020)">
+                                                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:1">
+                    <div style="font-size:2rem;line-height:1;margin-bottom:4px">🔧</div>
+                    <div style="font-size:0.65rem;font-weight:800;color:rgba(255,255,255,0.5);letter-spacing:0.15em">RDL Service Directory</div>
+                </div>
+                <span class="category-badge">Plumbing</span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><a href="service_view.php?id=1">Expert Plumbing Repairs</a></h5>
+                <p class="card-text">Fast and reliable plumbing....</p>
+                <div class="card-meta">
+                    <span>📍 Raddoluwa</span>
+                    <span>📅 Jul 08, 2026</span>
+                </div>
+                <div class="card-footer-info">
+                    <a href="provider_profile.php?id=1" class="name text-decoration-none">John Doe</a>
+                    <div class="d-flex gap-2">
+                        <a href="tel:+94771234567" class="btn-call">📞 Call</a>
+                        <a href="https://wa.me/94771234567" target="_blank" class="btn-call" style="background:#25D366">💬 WhatsApp</a>
+                        <a href="service_view.php?id=1" class="btn-view">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>      </div>
+
+  <!-- Most Viewed -->
+  <div class="section-header">
+    <h3>Most Viewed Services</h3>
+  </div>
+  <div class="row g-4 mb-5">
+          <div class="col-md-4 col-sm-6">        <div class="service-card">
+            <div class="card-img" style="background:linear-gradient(135deg, #275D2B, #1a4020)">
+                                                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:1">
+                    <div style="font-size:2rem;line-height:1;margin-bottom:4px">🔧</div>
+                    <div style="font-size:0.65rem;font-weight:800;color:rgba(255,255,255,0.5);letter-spacing:0.15em">RDL Service Directory</div>
+                </div>
+                <span class="category-badge">Plumbing</span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><a href="service_view.php?id=1">Expert Plumbing Repairs</a></h5>
+                <p class="card-text">Fast and reliable plumbing....</p>
+                <div class="card-meta">
+                    <span>📍 Raddoluwa</span>
+                    <span>📅 Jul 08, 2026</span>
+                </div>
+                <div class="card-footer-info">
+                    <a href="provider_profile.php?id=1" class="name text-decoration-none">John Doe</a>
+                    <div class="d-flex gap-2">
+                        <a href="tel:+94771234567" class="btn-call">📞 Call</a>
+                        <a href="https://wa.me/94771234567" target="_blank" class="btn-call" style="background:#25D366">💬 WhatsApp</a>
+                        <a href="service_view.php?id=1" class="btn-view">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>          <div class="col-md-4 col-sm-6">        <div class="service-card">
+            <div class="card-img" style="background:linear-gradient(135deg, #275D2B, #1a4020)">
+                                                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:1">
+                    <div style="font-size:2rem;line-height:1;margin-bottom:4px">⚡</div>
+                    <div style="font-size:0.65rem;font-weight:800;color:rgba(255,255,255,0.5);letter-spacing:0.15em">RDL Service Directory</div>
+                </div>
+                <span class="category-badge">Electrical</span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><a href="service_view.php?id=2">Home Electrical Wiring</a></h5>
+                <p class="card-text">Professional electrical installation....</p>
+                <div class="card-meta">
+                    <span>📍 Seeduwa</span>
+                    <span>📅 Jul 08, 2026</span>
+                </div>
+                <div class="card-footer-info">
+                    <a href="provider_profile.php?id=1" class="name text-decoration-none">John Doe</a>
+                    <div class="d-flex gap-2">
+                        <a href="tel:+94771234567" class="btn-call">📞 Call</a>
+                        <a href="https://wa.me/94771234567" target="_blank" class="btn-call" style="background:#25D366">💬 WhatsApp</a>
+                        <a href="service_view.php?id=2" class="btn-view">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>          <div class="col-md-4 col-sm-6">        <div class="service-card">
+            <div class="card-img" style="background:linear-gradient(135deg, #275D2B, #1a4020)">
+                                                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:1">
+                    <div style="font-size:2rem;line-height:1;margin-bottom:4px">🌿</div>
+                    <div style="font-size:0.65rem;font-weight:800;color:rgba(255,255,255,0.5);letter-spacing:0.15em">RDL Service Directory</div>
+                </div>
+                <span class="category-badge">Gardening</span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><a href="service_view.php?id=3">Garden Landscaping</a></h5>
+                <p class="card-text">Complete garden design....</p>
+                <div class="card-meta">
+                    <span>📍 Raddoluwa</span>
+                    <span>📅 Jul 08, 2026</span>
+                </div>
+                <div class="card-footer-info">
+                    <a href="provider_profile.php?id=1" class="name text-decoration-none">John Doe</a>
+                    <div class="d-flex gap-2">
+                        <a href="tel:+94771234567" class="btn-call">📞 Call</a>
+                        <a href="https://wa.me/94771234567" target="_blank" class="btn-call" style="background:#25D366">💬 WhatsApp</a>
+                        <a href="service_view.php?id=3" class="btn-view">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>      </div>
+  </div>
+
+<footer class="bg-dark text-white mt-5 pt-4 pb-3">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <h6 class="fw-bold mb-3">About</h6>
+        <p class="text-white-50 small">Raddoluwa/Seeduwa Service Directory is your local online hub to find and promote services in your area. Free listings for everyone!</p>
+      </div>
+      <div class="col-md-4">
+        <h6 class="fw-bold mb-3">Quick Links</h6>
+        <ul class="list-unstyled small">
+          <li class="mb-1"><a href="index.php" class="text-white-50 text-decoration-none">Home</a></li>
+          <li class="mb-1"><a href="register.php" class="text-white-50 text-decoration-none">Register</a></li>
+          <li class="mb-1"><a href="login.php" class="text-white-50 text-decoration-none">Login</a></li>
+          <li class="mb-1"><a href="dashboard.php" class="text-white-50 text-decoration-none">Dashboard</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h6 class="fw-bold mb-3">Contact</h6>
+        <ul class="list-unstyled small text-white-50">
+          <li class="mb-1"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9ff6f1f9f0dfecfaede9f6fcfafbf6edfafcebf0ede6b1f3f4">[email&#160;protected]</a></li>
+          <li class="mb-1">+94 77 123 4567</li>
+          <li>Raddoluwa, Sri Lanka</li>
+        </ul>
+      </div>
+    </div>
+    <hr class="border-secondary my-3" style="opacity:0.15">
+    <div class="text-center small text-white-50">
+      &copy; 2026 RDL Service Directory. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://zro.ovh/embed.js"></script>
+</body>
+</html>
